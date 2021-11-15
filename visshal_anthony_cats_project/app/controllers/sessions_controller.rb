@@ -1,6 +1,6 @@
 class SessionsController < ApplicationController
 
-    before_action :logged_in!, only: [:create, :new]
+    before_action :has_no_user!, only: [:create, :new]
 
     def new
         render :new

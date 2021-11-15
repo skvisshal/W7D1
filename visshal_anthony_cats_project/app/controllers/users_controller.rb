@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
 
-    before_action :logged_in!
+    before_action :has_no_user!
 
     def new
         @user = User.new

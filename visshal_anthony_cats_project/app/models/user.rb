@@ -1,8 +1,19 @@
 class User < ApplicationRecord
     validates :user_name, :password_digest, :session_token, presence: true
     validates :user_name, :session_token, uniqueness: true
+    validates :password, length: {minimum: 6, allow_nil: true}
 
     after_initialize :ensure_session_token
+
+    has_many :cats,
+    class_name: :Cat,
+    primary_key: :id,
+    foreign_key: :user_id
+
+    has_many :requests,
+    class_name: :CatRentalRequest,
+    primary_key: :id,
+    foreign_key: :user_id
 
     attr_reader :password
 
@@ -14,6 +25,9 @@ class User < ApplicationRecord
         user.is_password?(password) ? user : nil
     end
 
+    def owns_cat?(cat)
+        cat.user_id == self.id
+    end
     def is_password?(password)
         BCrypt::Password.new(self.password_digest).is_password?(password)
     end
